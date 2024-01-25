@@ -70,6 +70,7 @@ COMLDEF void* coml_get_value_raw(Coml* coml, const char* table_name, const char*
 COMLDEF int coml_get_value_int(Coml* coml, const char* table_name, const char* key_name);
 COMLDEF float coml_get_value_float(Coml* coml, const char* table_name, const char* key_name);
 COMLDEF char* coml_get_value_string(Coml* coml, const char* table_name, const char* key_name);
+COMLDEF bool coml_get_value_bool(Coml* coml, const char* table_name, const char* key_name);
 COMLDEF double* coml_get_value_list_double(Coml* coml, const char* table_name, const char* key_name);
 COMLDEF char** coml_get_value_list_string(Coml* coml, const char* table_name, const char* key_name);
 
@@ -78,6 +79,7 @@ COMLDEF void* coml_find_value_raw(Coml* coml, const char* key_name);
 COMLDEF int coml_find_value_int(Coml* coml, const char* key_name);
 COMLDEF float coml_find_value_float(Coml* coml, const char* key_name);
 COMLDEF char* coml_find_value_string(Coml* coml, const char* key_name);
+COMLDEF bool coml_find_value_bool(Coml* coml, const char* key_name);
 COMLDEF double* coml_find_value_list_double(Coml* coml, const char* key_name);
 COMLDEF char** coml_find_value_list_string(Coml* coml, const char* key_name);
 
@@ -86,6 +88,7 @@ COMLDEF Coml_KV* coml_get_kv(Coml* coml, const char* table_name, const char* key
 COMLDEF bool coml_set_int(Coml* coml, int value, const char* table_name, const char* key_name);
 COMLDEF bool coml_set_float(Coml* coml, float value, const char* table_name, const char* key_name);
 COMLDEF bool coml_set_string(Coml* coml, char* value, const char* table_name, const char* key_name);
+COMLDEF bool coml_set_bool(Coml* coml, bool value, const char* table_name, const char* key_name);
 COMLDEF bool coml_set_list_double(Coml* coml, double* value, size_t length, const char* table_name, const char* key_name);
 COMLDEF bool coml_set_list_string(Coml* coml, char** value, size_t length, const char* table_name, const char* key_name);
 
@@ -554,6 +557,13 @@ COMLDEF char* coml_get_value_string(Coml* coml, const char* table_name, const ch
     return (char*)value;
 }
 
+COMLDEF bool coml_get_value_bool(Coml* coml, const char* table_name, const char* key_name) {
+    void* value = coml_get_value_raw(coml, table_name, key_name);
+    if (value == NULL) return false;
+
+    return *(bool*)value;
+}
+
 COMLDEF double* coml_get_value_list_double(Coml* coml, const char* table_name, const char* key_name) {
     void* value = coml_get_value_raw(coml, table_name, key_name);
     if (value == NULL) return NULL;
@@ -614,6 +624,13 @@ COMLDEF char* coml_find_value_string(Coml* coml, const char* key_name) {
     if (value == NULL) return NULL;
 
     return (char*)value;
+}
+
+COMLDEF bool coml_find_value_bool(Coml* coml, const char* key_name) {
+    void* value = coml_find_value_raw(coml, key_name);
+    if (value == NULL) return false;
+
+    return *(bool*)value;
 }
 
 COMLDEF double* coml_find_value_list_double(Coml* coml, const char* key_name) {
@@ -694,6 +711,16 @@ COMLDEF bool coml_set_string(Coml* coml, char* value, const char* table_name, co
     char* temp_buf = strdup(value);
     kv->value = strdup(temp_buf);
     free(temp_buf);
+
+    return true;
+}
+
+COMLDEF bool coml_set_bool(Coml* coml, bool value, const char* table_name, const char* key_name) {
+    Coml_KV* kv = coml_get_kv(coml, table_name, key_name);
+    if (kv == NULL || kv->type != ComlType_Boolean) return false;
+
+    kv->value = realloc(kv->value, sizeof(bool));
+    *((bool*)kv->value) = value;
 
     return true;
 }

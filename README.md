@@ -87,7 +87,7 @@ bool success = coml_write_file(coml, "path/to/file.toml");
 
 ```shell
 $ ./build.sh
-$ ./main
+$ ./demo
 ```
 
 ## License

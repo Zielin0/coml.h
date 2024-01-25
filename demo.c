@@ -41,6 +41,8 @@ int main(void) {
     printf("After:\n");
     printf("%.2f\n", coml_get_value_float(coml, "qwerty", "floot"));
 
+    printf("%s\n", coml_find_value_string(coml, "some-string"));
+
     bool success_write = coml_write_file(coml, "write_test.toml");
     if (!success_write) {
         fprintf(stderr, "Failed to write\n"); 
