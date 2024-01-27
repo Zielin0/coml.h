@@ -42,7 +42,7 @@ This program will output:
 ```
 Table: stuff
     str1: qweqwe zxczxc asdasd
-    integer: 123.0000000000
+    integer: 123
     floot: 32.6900000000
     list:
 	    0 - this
