@@ -50,9 +50,9 @@ Table: stuff
 	    2 - a
 	    3 - list
     nums:
-	    0 - 123.0000000000
-	    1 - 69.0000000000
-	    2 - 420.0000000000
+	    0 - 123
+	    1 - 69
+	    2 - 420
 ```
 
 **You can also read from a file**:
